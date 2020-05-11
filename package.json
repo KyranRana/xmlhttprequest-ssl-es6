@@ -24,7 +24,7 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "test": "jest --verbose",
+    "test": "node_modules/.bin/jest",
     "debug": "node --inspect-brk node_modules/.bin/jest --runInBand"
   },
   "directories": {
@@ -52,6 +52,7 @@
     ]
   },
   "jest": {
+    "verbose": true,
     "testEnvironment": "node"
   },
   "type": "module"
