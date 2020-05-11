@@ -40,8 +40,7 @@
     "@babel/plugin-transform-runtime": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
     "babel-jest": "^26.0.1",
-    "jest": "^26.0.1",
-    "why-is-node-running": "^2.1.2"
+    "jest": "^26.0.1"
   },
   "babel": {
     "presets": [
