@@ -32,6 +32,7 @@
     "example": "./example"
   },
   "main": "./lib/XMLHttpRequest.js",
+  "exports": "./lib/XMLHttpRequest.js",
   "dependencies": {
     "@babel/runtime": "^7.9.6"
   },
