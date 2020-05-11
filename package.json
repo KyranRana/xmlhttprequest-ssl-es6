@@ -1,6 +1,6 @@
 {
-  "name": "xmlhttprequest-ssl-node",
-  "description": "XMLHttpRequest for Node",
+  "name": "xmlhttprequest-ssl-es6-node",
+  "description": "XMLHttpRequest for ES6 Node",
   "version": "0.0.1",
   "author": {
     "name": "Kyran Rana"
