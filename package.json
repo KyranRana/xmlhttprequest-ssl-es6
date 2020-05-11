@@ -1,5 +1,5 @@
 {
-  "name": "xmlhttprequest-ssl-es6-node",
+  "name": "@kyran12/xmlhttprequest-ssl-es6-node",
   "description": "XMLHttpRequest for ES6 Node",
   "version": "0.0.1",
   "author": {
