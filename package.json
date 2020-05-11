@@ -1,7 +1,7 @@
 {
-  "name": "xmlhttprequest-ssl-es6",
-  "description": "ES6 flavour XMLHttpRequest for Node",
-  "version": "1.6.0",
+  "name": "xmlhttprequest-ssl-node",
+  "description": "XMLHttpRequest for Node",
+  "version": "0.0.1",
   "author": {
     "name": "Kyran Rana"
   },
