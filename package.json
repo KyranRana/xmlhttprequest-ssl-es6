@@ -1,0 +1,58 @@
+{
+  "name": "xmlhttprequest-ssl-es6",
+  "description": "ES6 flavour XMLHttpRequest for Node",
+  "version": "1.6.0",
+  "author": {
+    "name": "Kyran Rana"
+  },
+  "keywords": [
+    "xhr",
+    "ajax"
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://creativecommons.org/licenses/MIT/"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kyranrana/xmlhttprequest-ssl-node.git"
+  },
+  "bugs": "http://github.com/kyranrana/xmlhttprequest-ssl-node/issues",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "test": "jest --verbose",
+    "debug": "node --inspect-brk node_modules/.bin/jest --runInBand"
+  },
+  "directories": {
+    "lib": "./lib",
+    "example": "./example"
+  },
+  "main": "./lib/XMLHttpRequest.js",
+  "dependencies": {
+    "@babel/runtime": "^7.9.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-transform-runtime": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "babel-jest": "^26.0.1",
+    "jest": "^26.0.1",
+    "why-is-node-running": "^2.1.2"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ],
+    "plugins": [
+      "@babel/plugin-transform-runtime"
+    ]
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "type": "module"
+}
