@@ -1,22 +1,25 @@
-import XMLHttpRequest from '../../XMLHttpRequest'
-import { spawn } from 'child_process'
+import {
+    spawn 
+} from 'child_process'
 
-describe("XMLHttpRequest sync tests", () => {
+import XMLHttpRequest from '../../main/XMLHttpRequest'
 
-    test("http test", done => {
+describe('XMLHttpRequest sync tests', () => {
+
+    test('http test', done => {
         expect.assertions(3)
 
         // we need to start up the http server in a separate instance
         const proc = spawn(process.argv[0], ['-e', `
             const http = require('http')
             const server = http.createServer(function(req, res) {
-                const body = "Hello World"
+                const body = 'Hello World'
     
                 res.writeHead(200, {
-                    "Content-Type": "text/plain",
-                    "Content-Length": Buffer.byteLength(body),
-                    "Date": "Thu, 30 Aug 2012 18:17:53 GMT",
-                    "Connection": "close"
+                    'Content-Type': 'text/plain',
+                    'Content-Length': Buffer.byteLength(body),
+                    'Date': 'Thu, 30 Aug 2012 18:17:53 GMT',
+                    'Connection': 'close'
                 })
                 res.write(body)
                 res.end()
@@ -27,11 +30,11 @@ describe("XMLHttpRequest sync tests", () => {
         
         const xhr = new XMLHttpRequest()
         
-        xhr.open("GET", "http://localhost:8004", false)
+        xhr.open('GET', 'http://localhost:8004', false)
         xhr.send()
 
         expect(xhr.status).toBe(200)
-        expect(xhr.responseText).toBe("Hello World")
+        expect(xhr.responseText).toBe('Hello World')
 
         const interval = 100
         const maxRetries = 3
@@ -55,12 +58,14 @@ describe("XMLHttpRequest sync tests", () => {
         }, interval)
     })
 
-    test("ftp test", () => {
+    test('ftp test', () => {
         const xhr = new XMLHttpRequest()
-            
-        xhr.open("GET", `file://${__dirname}/data/hello-world.txt`, false)
+        
+        const parentdir = __dirname.replace('/integration', '')
+
+        xhr.open('GET', `file://${parentdir}/resource/hello-world.txt`, false)
         xhr.send()
         
-        expect(xhr.responseText).toBe("Hello World")
+        expect(xhr.responseText).toBe('Hello World')
     })
 })

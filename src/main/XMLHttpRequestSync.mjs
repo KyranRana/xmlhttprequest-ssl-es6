@@ -6,18 +6,18 @@ function makeSyncRequest(ssl, options, data) {
         const doRequest = ssl ? https.request : http.request
         
         const request = doRequest(options, response => {
-            response.setEncoding("utf8")
+            response.setEncoding('utf8')
 
-            let responseText = ""
-            response.on("data", chunk => responseText += chunk)
+            let responseText = ''
+            response.on('data', chunk => responseText += chunk)
 
-            response.on("end", () => resolve({ 
+            response.on('end', () => resolve({ 
                 statusCode: response.statusCode,
                 // destructuring
                 responseText 
             }))
             
-            response.on("error", reject)
+            response.on('error', reject)
         })
         .on('error', reject)
 

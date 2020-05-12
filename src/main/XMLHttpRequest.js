@@ -4,7 +4,7 @@
  * This can be used with JS designed for browsers to improve reuse of code and
  * allow the use of existing libraries.
  *
- * Usage: include("XMLHttpRequest.js") and use XMLHttpRequest per W3C specs.
+ * Usage: include('XMLHttpRequest.js') and use XMLHttpRequest per W3C specs.
  *
  * @author Dan DeFelippi <dan@driverdan.com>
  * @contributor David Ellis <d.f.ellis@ieee.org>
@@ -22,7 +22,7 @@ import {
 import {
     FORBIDDEN_REQUEST_HEADERS,
     FORBIDDEN_REQUEST_METHODS
-} from './XMLHttpRequestConstants.js'
+} from './XMLHttpRequestConstants'
 
 import {
     UNSENT, 
@@ -30,7 +30,7 @@ import {
     HEADERS_RECEIVED, 
     LOADING, 
     DONE
-} from './XMLHttpRequestStates.js'
+} from './XMLHttpRequestStates'
 
 /**
  * `XMLHttpRequest`
@@ -39,7 +39,7 @@ import {
  *
  *  - `agent`: An http.Agent instance; http.globalAgent may be used; if 'undefined', agent usage is disabled
  *
- * @param {Object} opts optional "options" object
+ * @param {Object} opts optional 'options' object
  */
 
 class XMLHttpRequest {
@@ -58,8 +58,8 @@ class XMLHttpRequest {
         this._requestSettings = {}
 
         this._defaultRequestHeaders = {
-            "User-Agent": "node-XMLHttpRequest",
-            "Accept": "*/*"
+            'User-Agent': 'node-XMLHttpRequest',
+            'Accept': '*/*'
         }
         this._requestHeaders = Object.assign({}, this._defaultRequestHeaders)
 
@@ -85,8 +85,8 @@ class XMLHttpRequest {
         this.onreadystatechange = null
 
         // Result & response
-        this.responseText = ""
-        this.responseXML = ""
+        this.responseText = ''
+        this.responseXML = ''
         this.status = null
         this.statusText = null
     }
@@ -128,15 +128,15 @@ class XMLHttpRequest {
     
         // Check for valid request method
         if (!this._isAllowedHttpMethod(method)) {
-          throw new Error("SecurityError: Request method not allowed")
+          throw new Error('SecurityError: Request method not allowed')
         }
     
         this._requestSettings = {
-          "method": method,
-          "url": url.toString(),
-          "async": (typeof async !== "boolean" ? true : async),
-          "user": user || null,
-          "password": password || null
+          'method': method,
+          'url': url.toString(),
+          'async': (typeof async !== 'boolean' ? true : async),
+          'user': user || null,
+          'password': password || null
         }
     
         this.setState(OPENED)
@@ -161,17 +161,17 @@ class XMLHttpRequest {
      */
     setRequestHeader(header, value) {
         if (this.readyState != OPENED) {
-            throw new Error("INVALID_STATE_ERR: setRequestHeader can only be called when state is OPEN")
+            throw new Error('INVALID_STATE_ERR: setRequestHeader can only be called when state is OPEN')
         }
 
         let lowercaseHeader = header.toLowerCase()
         if (!this._isAllowedHttpHeader(lowercaseHeader)) {
-            console.warn('Refused to set unsafe header "' + lowercaseHeader + '"')
+            console.warn('Refused to set unsafe header \'' + lowercaseHeader + '\'')
             return false
         }
         
         if (this._sendFlag) {
-            throw new Error("INVALID_STATE_ERR: send flag is true")
+            throw new Error('INVALID_STATE_ERR: send flag is true')
         }
         
         this._requestHeaders[lowercaseHeader] = value
@@ -186,7 +186,7 @@ class XMLHttpRequest {
      * @return string Text of the header or null if it doesn't exist.
      */
     getResponseHeader(header) {
-        if (typeof header === "string"
+        if (typeof header === 'string'
             && this.readyState > OPENED
             && this._response.headers[header.toLowerCase()]
             && !this._errorFlag
@@ -204,15 +204,15 @@ class XMLHttpRequest {
      */
     getAllResponseHeaders() {
         if (this.readyState < HEADERS_RECEIVED || this._errorFlag) {
-            return ""
+            return ''
         }
         
-        let result = ""
+        let result = ''
 
         for (let i in this._response.headers) {
             // Cookie headers are excluded
-            if (i !== "set-cookie" && i !== "set-cookie2") {
-                result += i + ": " + this._response.headers[i] + "\r\n"
+            if (i !== 'set-cookie' && i !== 'set-cookie2') {
+                result += i + ': ' + this._response.headers[i] + '\r\n'
             }
         }
 
@@ -226,7 +226,7 @@ class XMLHttpRequest {
      * @return string Returns the request header or empty string if not set
      */
     getRequestHeader(name) {
-        if (typeof name === "string") {
+        if (typeof name === 'string') {
             let lowercaseName = name.toLowerCase()
 
             if (this._requestHeaders[lowercaseName]) {
@@ -234,7 +234,7 @@ class XMLHttpRequest {
             }
         }
 
-        return ""
+        return ''
     }
 
     /**
@@ -244,11 +244,11 @@ class XMLHttpRequest {
      */
     send(data) {
         if (this.readyState != OPENED) {
-            throw new Error("INVALID_STATE_ERR: connection must be opened before send() is called")
+            throw new Error('INVALID_STATE_ERR: connection must be opened before send() is called')
         }
 
         if (this._sendFlag) {
-            throw new Error("INVALID_STATE_ERR: send has already been called")
+            throw new Error('INVALID_STATE_ERR: send has already been called')
         }
 
         let ssl = false, local = false
@@ -270,17 +270,17 @@ class XMLHttpRequest {
 
             case undefined:
             case '':
-                host = "localhost"
+                host = 'localhost'
                 break
 
             default:
-                throw new Error("Protocol not supported.")
+                throw new Error('Protocol not supported.')
         }
 
         // Load files off the local filesystem (file://)
         if (local) {
-            if (this._requestSettings.method !== "GET") {
-                throw new Error("XMLHttpRequest: Only GET method is supported")
+            if (this._requestSettings.method !== 'GET') {
+                throw new Error('XMLHttpRequest: Only GET method is supported')
             }
 
             if (this._requestSettings.async) {
@@ -316,34 +316,34 @@ class XMLHttpRequest {
         let uri = url.pathname + (url.search ? url.search : '')
 
         // Set the Host header or the server may reject the request
-        this._requestHeaders["Host"] = host
+        this._requestHeaders['Host'] = host
         if (!((ssl && port === 443) || port === 80)) {
-            this._requestHeaders["Host"] += ':' + url.port
+            this._requestHeaders['Host'] += ':' + url.port
         }
 
         // Set Basic Auth if necessary
         if (this._requestSettings.user) {
-            if (typeof this._requestSettings.password == "undefined") {
-                this._requestSettings.password = ""
+            if (typeof this._requestSettings.password == 'undefined') {
+                this._requestSettings.password = ''
             }
             
-            var authBuf = new Buffer(this._requestSettings.user + ":" + this._requestSettings.password)
-            this._requestHeaders["Authorization"] = "Basic " + authBuf.toString("base64")
+            var authBuf = new Buffer(this._requestSettings.user + ':' + this._requestSettings.password)
+            this._requestHeaders['Authorization'] = 'Basic ' + authBuf.toString('base64')
         }
 
         // Set content length header
-        if (this._requestSettings.method === "GET" || this._requestSettings.method === "HEAD") {
+        if (this._requestSettings.method === 'GET' || this._requestSettings.method === 'HEAD') {
             data = null
         } else if (data) {
-            this._requestHeaders["Content-Length"] = Buffer.isBuffer(data) ? data.length : Buffer.byteLength(data)
+            this._requestHeaders['Content-Length'] = Buffer.isBuffer(data) ? data.length : Buffer.byteLength(data)
 
-            if (!this._requestHeaders["Content-Type"]) {
-                this._requestHeaders["Content-Type"] = "text/plain;charset=UTF-8"
+            if (!this._requestHeaders['Content-Type']) {
+                this._requestHeaders['Content-Type'] = 'text/plain;charset=UTF-8'
             }
-        } else if (this._requestSettings.method === "POST") {
+        } else if (this._requestSettings.method === 'POST') {
             // For a post with no data set Content-Length: 0.
             // This is required by buggy servers that don't meet the specs.
-            this._requestHeaders["Content-Length"] = 0
+            this._requestHeaders['Content-Length'] = 0
         }
 
         let agent = this._options.agent || false
@@ -380,7 +380,7 @@ class XMLHttpRequest {
             this._sendFlag = true
 
             // As per spec, this is called here for historical reasons.
-            this.dispatchEvent("readystatechange")
+            this.dispatchEvent('readystatechange')
 
             let responseHandler = resp => {
                 // Set response var to the response we got back
@@ -425,7 +425,7 @@ class XMLHttpRequest {
                 }
 
                 if (this._response && this._response.setEncoding) {
-                    this._response.setEncoding("utf8")
+                    this._response.setEncoding('utf8')
                 }
 
                 this.setState(HEADERS_RECEIVED)
@@ -469,10 +469,10 @@ class XMLHttpRequest {
 
             this._request.end()
 
-            this.dispatchEvent("loadstart")
+            this.dispatchEvent('loadstart')
         } else { // Synchronous
             const syncProc = spawnSync(process.argv[0], [
-                `${__dirname}/XMLHttpRequestSync.js`, 
+                `${__dirname}/XMLHttpRequestSync.mjs`, 
                 ssl, 
                 JSON.stringify(options),
                 data
@@ -480,7 +480,7 @@ class XMLHttpRequest {
 
             const rawResponse = new String(syncProc.stdout)
             const rawErrorMessage = new String(syncProc.stderr)
-
+            
             if (syncProc.status !== 0) {
                 const errorMessage = JSON.parse(rawErrorMessage)
 
@@ -523,8 +523,8 @@ class XMLHttpRequest {
 
         this._requestHeaders = Object.assign({}, this._defaultRequestHeaders)
         
-        this.responseText = ""
-        this.responseXML = ""
+        this.responseText = ''
+        this.responseXML = ''
 
         this._errorFlag = true
         this._abortedFlag = true
@@ -567,14 +567,14 @@ class XMLHttpRequest {
     }
 
     /**
-     * Dispatch any events, including both "on" methods and events attached using addEventListener.
+     * Dispatch any events, including both 'on' methods and events attached using addEventListener.
      */
     dispatchEvent(event) {
-        if (typeof this["on" + event] === "function") {
+        if (typeof this['on' + event] === 'function') {
             if (this.readyState === DONE) {
-                setImmediate(() => this["on" + event]())
+                setImmediate(() => this['on' + event]())
             } else {
-                this["on" + event]()
+                this['on' + event]()
             }
         }
         
@@ -602,24 +602,24 @@ class XMLHttpRequest {
         this.readyState = state
 
         if (this._requestSettings.async || this.readyState < OPENED || this.readyState === DONE) {
-            this.dispatchEvent("readystatechange")
+            this.dispatchEvent('readystatechange')
         }
 
         if (this.readyState === DONE) {
             let fire
 
             if (this._abortedFlag) {
-                fire = "abort"
+                fire = 'abort'
             } else if (this._errorFlag) {
-                fire = "error"
+                fire = 'error'
             } else {
-                fire = "load"
+                fire = 'load'
             }
 
             this.dispatchEvent(fire)
 
             // @TODO figure out InspectorInstrumentation::didLoadXHR(cookie)
-            this.dispatchEvent("loadend")
+            this.dispatchEvent('loadend')
         }
     }
 }

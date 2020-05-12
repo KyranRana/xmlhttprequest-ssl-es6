@@ -24,12 +24,11 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "test": "node_modules/.bin/jest",
-    "debug": "node --inspect-brk node_modules/.bin/jest --runInBand"
+    "build": "node_modules/.bin/babel src/main -d lib",
+    "test": "node_modules/.bin/jest"
   },
   "directories": {
-    "lib": "./lib",
-    "example": "./example"
+    "lib": "./src"
   },
   "main": "./lib/XMLHttpRequest.js",
   "exports": "./lib/XMLHttpRequest.js",
@@ -37,23 +36,11 @@
     "@babel/runtime": "^7.9.6"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.6",
     "@babel/plugin-transform-runtime": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
     "babel-jest": "^26.0.1",
     "jest": "^26.0.1"
-  },
-  "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ],
-    "plugins": [
-      "@babel/plugin-transform-runtime"
-    ]
-  },
-  "jest": {
-    "verbose": true,
-    "testEnvironment": "node"
-  },
-  "type": "module"
+  }
 }
