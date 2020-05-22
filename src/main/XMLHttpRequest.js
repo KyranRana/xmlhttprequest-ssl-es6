@@ -11,9 +11,16 @@
  * @license MIT
  */
 import fs from 'fs'
-import Url from 'url'
 import http from 'http'
 import https from 'https'
+
+import Url, { 
+    fileURLToPath 
+} from 'url'
+
+import { 
+    dirname 
+} from 'path'
 
 import {
     spawnSync
@@ -32,12 +39,15 @@ import {
     DONE
 } from './XMLHttpRequestStates'
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
 /**
  * `XMLHttpRequest`
  *
  * Supported options for the `opts` object are:
  *
- *  - `agent`: An http.Agent instance; http.globalAgent may be used; if 'undefined', agent usage is disabled
+ *  - `agent`: An http.Agent instance; http.globalAgent may be used; if 'undxefined', agent usage is disabled
  *
  * @param {Object} opts optional 'options' object
  */
@@ -472,7 +482,7 @@ class XMLHttpRequest {
             this.dispatchEvent('loadstart')
         } else { // Synchronous
             const syncProc = spawnSync(process.argv[0], [
-                `${__dirname}/XMLHttpRequestSync.mjs`, 
+                `${__dirname}/XMLHttpRequestSync.js`, 
                 ssl, 
                 JSON.stringify(options),
                 data

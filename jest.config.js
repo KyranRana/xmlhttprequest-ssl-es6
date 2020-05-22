@@ -1,4 +1,5 @@
-module.exports = {
+export default {
     "verbose": true,
-    "testEnvironment": "node"
+    "transform": {},
+    "testEnvironment": "jest-environment-node"
 }

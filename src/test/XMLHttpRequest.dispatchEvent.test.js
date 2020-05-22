@@ -1,5 +1,9 @@
 import XMLHttpRequest from '../main/XMLHttpRequest'
 
+import {
+    jest
+} from '@jest/globals'
+
 describe('XMLHttpRequest dispatchEvent tests', () => {
     test('dispatching an event', () => {
         const xhr = new XMLHttpRequest()

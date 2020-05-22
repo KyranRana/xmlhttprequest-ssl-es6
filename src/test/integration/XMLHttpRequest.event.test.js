@@ -10,6 +10,10 @@ import {
     DONE
 } from '../../main/XMLHttpRequestStates'
 
+import {
+    jest
+} from '@jest/globals'
+
 describe('XMLHttpRequest event tests', () => {
     test('test event lifecycle is executed correctly when successfully collecting data from a webpage', async () => {
         const asyncTest = () => new Promise(resolve => {

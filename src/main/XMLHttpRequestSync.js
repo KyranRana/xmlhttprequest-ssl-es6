@@ -13,13 +13,13 @@ function makeSyncRequest(ssl, options, data) {
 
             response.on('end', () => resolve({ 
                 statusCode: response.statusCode,
-                // destructuring
+
                 responseText 
             }))
             
             response.on('error', reject)
-        })
-        .on('error', reject)
+        
+        }).on('error', reject)
 
         if (data) {
             request.write(data)

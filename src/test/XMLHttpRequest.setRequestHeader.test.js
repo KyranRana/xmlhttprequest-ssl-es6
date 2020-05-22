@@ -8,6 +8,9 @@ import {
     OPENED 
 } from '../main/XMLHttpRequestStates'
 
+import {
+    jest
+} from '@jest/globals'
 
 describe('XMLHttpRequest setRequestHeader tests', () => {
     test('Can not set request header without opening a connection', () => {

@@ -1,5 +1,9 @@
 import XMLHttpRequest from '../main/XMLHttpRequest'
 
+import {
+    jest
+} from '@jest/globals'
+
 import { 
     FORBIDDEN_REQUEST_METHODS 
 } from '../main/XMLHttpRequestConstants'

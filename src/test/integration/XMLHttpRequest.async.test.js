@@ -5,6 +5,17 @@ import {
     DONE 
 } from '../../main/XMLHttpRequestStates'
 
+import { 
+    fileURLToPath 
+} from 'url'
+
+import { 
+    dirname 
+} from 'path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
 describe('XMLHttpRequest async tests', () => {
     test('http test', done => {
         const server = http.createServer(function(req, res) {
