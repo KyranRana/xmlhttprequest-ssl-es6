@@ -29,7 +29,7 @@ import {
 import {
     FORBIDDEN_REQUEST_HEADERS,
     FORBIDDEN_REQUEST_METHODS
-} from './XMLHttpRequestConstants'
+} from './XMLHttpRequestConstants.js'
 
 import {
     UNSENT, 
@@ -37,7 +37,7 @@ import {
     HEADERS_RECEIVED, 
     LOADING, 
     DONE
-} from './XMLHttpRequestStates'
+} from './XMLHttpRequestStates.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
