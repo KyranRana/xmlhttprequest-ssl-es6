@@ -68,8 +68,8 @@ class XMLHttpRequest {
         this._requestSettings = {}
 
         this._defaultRequestHeaders = {
-            'User-Agent': 'node-XMLHttpRequest',
-            'Accept': '*/*'
+            'user-agent': 'node-XMLHttpRequest',
+            'accept': '*/*'
         }
         this._requestHeaders = Object.assign({}, this._defaultRequestHeaders)
 
@@ -326,9 +326,9 @@ class XMLHttpRequest {
         let uri = url.pathname + (url.search ? url.search : '')
 
         // Set the Host header or the server may reject the request
-        this._requestHeaders['Host'] = host
+        this._requestHeaders['host'] = host
         if (!((ssl && port === 443) || port === 80)) {
-            this._requestHeaders['Host'] += ':' + url.port
+            this._requestHeaders['host'] += ':' + url.port
         }
 
         // Set Basic Auth if necessary
@@ -338,22 +338,22 @@ class XMLHttpRequest {
             }
             
             var authBuf = new Buffer(this._requestSettings.user + ':' + this._requestSettings.password)
-            this._requestHeaders['Authorization'] = 'Basic ' + authBuf.toString('base64')
+            this._requestHeaders['authorization'] = 'Basic ' + authBuf.toString('base64')
         }
 
         // Set content length header
         if (this._requestSettings.method === 'GET' || this._requestSettings.method === 'HEAD') {
             data = null
         } else if (data) {
-            this._requestHeaders['Content-Length'] = Buffer.isBuffer(data) ? data.length : Buffer.byteLength(data)
+            this._requestHeaders['content-length'] = Buffer.isBuffer(data) ? data.length : Buffer.byteLength(data)
 
-            if (!this._requestHeaders['Content-Type']) {
-                this._requestHeaders['Content-Type'] = 'text/plain;charset=UTF-8'
+            if (!this._requestHeaders['content-type']) {
+                this._requestHeaders['content-type'] = 'text/plain;charset=UTF-8'
             }
         } else if (this._requestSettings.method === 'POST') {
             // For a post with no data set Content-Length: 0.
             // This is required by buggy servers that don't meet the specs.
-            this._requestHeaders['Content-Length'] = 0
+            this._requestHeaders['content-length'] = 0
         }
 
         let agent = this._options.agent || false
