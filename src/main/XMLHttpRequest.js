@@ -95,6 +95,7 @@ class XMLHttpRequest {
         this.onreadystatechange = null
 
         // Result & response
+        this.responseBuffer = []
         this.responseText = ''
         this.responseXML = ''
         this.status = null
@@ -294,19 +295,21 @@ class XMLHttpRequest {
             }
 
             if (this._requestSettings.async) {
-                fs.readFile(url.pathname, 'utf8', (error, data) => {
+                fs.readFile(url.pathname, (error, buffer) => {
                     if (error) {
                         this.handleError(error)
                     } else {
                         this.status = 200
-                        this.responseText = data
+                        this.responseBuffer = buffer
+                        this.responseText = buffer.toString('utf8')
                         
                         this.setState(DONE)
                     }
                 })
             } else {
                 try {
-                    this.responseText = fs.readFileSync(url.pathname, 'utf8')
+                    this.responseBuffer = fs.readFileSync(url.pathname)
+                    this.responseText = this.responseBuffer.toString('utf8')
                     this.status = 200
                         
                     this.setState(DONE)
@@ -396,6 +399,14 @@ class XMLHttpRequest {
                 // Set response var to the response we got back
                 // This is so it remains accessable outside this scope
                 this._response = resp
+
+                const contentEncoding = resp.headers['content-encoding']
+
+                if (contentEncoding === 'gzip'
+                    || contentEncoding === 'compress'
+                    || contentEncoding === 'deflate') {
+                    this._response = (this._response.statusCode === 204) ? this._response : this._res.pipe(zlib.createUnzip());
+                }
                 
                 // Check for redirect
                 // @TODO Prevent looped redirects
@@ -441,10 +452,11 @@ class XMLHttpRequest {
                 this.setState(HEADERS_RECEIVED)
                 this.status = this._response.statusCode
 
+                const responseBuffer = []
                 this._response.on('data', chunk => {
                     // Make sure there's some data
                     if (chunk) {
-                        this.responseText += chunk
+                        responseBuffer.push(chunk)
                     }
        
                     // Don't emit state changes if the connection has been aborted.
@@ -455,6 +467,9 @@ class XMLHttpRequest {
 
                 this._response.on('end', () => {
                     if (this._sendFlag) {
+                        this.responseBuffer = responseBuffer
+                        this.responseText = responseBuffer.toString('utf8')
+
                         // The sendFlag needs to be set before setState is called.  Otherwise if we are chaining callbacks
                         // there can be a timing issue (the callback is called and a new call is made before the flag is reset).
                         this._sendFlag = false
@@ -499,7 +514,10 @@ class XMLHttpRequest {
                 // If the file returned okay, parse its data and move to the DONE state
                 const response = JSON.parse(rawResponse)
 
+                console.log(JSON.stringify(response.responseBuffer))
+
                 this.status = response.statusCode
+                this.responseBuffer = response.responseBuffer
                 this.responseText = response.responseText
             
                 this.setState(DONE)

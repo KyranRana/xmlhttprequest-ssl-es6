@@ -6,16 +6,30 @@ function makeSyncRequest(ssl, options, data) {
         const doRequest = ssl ? https.request : http.request
         
         const request = doRequest(options, response => {
-            response.setEncoding('utf8')
+            const contentEncoding = response.headers['content-encoding']
 
-            let responseText = ''
-            response.on('data', chunk => responseText += chunk)
+            if (contentEncoding === 'gzip'
+                || contentEncoding === 'compress'
+                || contentEncoding === 'deflate') {
+                response = (response.statusCode === 204) ? response : response.pipe(zlib.createUnzip());
+            }
+            
+            const responseBuffer = []
+            response.on('data', chunk => {
+                if (chunk) {
+                    responseBuffer.push(chunk)
+                }
+            })
 
-            response.on('end', () => resolve({ 
-                statusCode: response.statusCode,
+            response.on('end', () => {
+                const responseText = responseBuffer.toString('utf8')
 
-                responseText 
-            }))
+                resolve({ 
+                    statusCode: response.statusCode,
+                    responseBuffer,
+                    responseText 
+                })
+            })
             
             response.on('error', reject)
         
