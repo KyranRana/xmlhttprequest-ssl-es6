@@ -1,5 +1,6 @@
 import http from 'http'
 import https from 'https'
+import zlib from 'zlib'
 
 function makeSyncRequest(ssl, options, data) {
     return new Promise((resolve, reject) => {

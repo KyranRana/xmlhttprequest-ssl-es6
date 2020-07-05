@@ -11,6 +11,7 @@
  * @license MIT
  */
 import fs from 'fs'
+import zlib from 'zlib'
 import http from 'http'
 import https from 'https'
 
