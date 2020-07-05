@@ -9,24 +9,27 @@ function makeSyncRequest(ssl, options, data) {
         const request = doRequest(options, response => {
             const contentEncoding = response.headers['content-encoding']
 
+            const stream = response
+
             if (contentEncoding === 'gzip'
                 || contentEncoding === 'compress'
                 || contentEncoding === 'deflate') {
-                response = (response.statusCode === 204) ? response : response.pipe(zlib.createUnzip());
+                stream = (stream.statusCode === 204) ? stream : stream.pipe(zlib.createUnzip());
             }
             
             const responseBuffer = []
-            response.on('data', chunk => {
+            stream.on('data', chunk => {
                 if (chunk) {
                     responseBuffer.push(chunk)
                 }
             })
 
-            response.on('end', () => {
+            stream.on('end', () => {
                 const responseText = responseBuffer.toString('utf8')
 
                 resolve({ 
                     statusCode: response.statusCode,
+                    responseHeaders: response.headers,
                     responseBuffer,
                     responseText 
                 })

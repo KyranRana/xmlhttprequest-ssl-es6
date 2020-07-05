@@ -400,13 +400,14 @@ class XMLHttpRequest {
                 // Set response var to the response we got back
                 // This is so it remains accessable outside this scope
                 this._response = resp
+                this._stream = resp
 
                 const contentEncoding = resp.headers['content-encoding']
 
                 if (contentEncoding === 'gzip'
                     || contentEncoding === 'compress'
                     || contentEncoding === 'deflate') {
-                    this._response = (this._response.statusCode === 204) ? this._response : this._response.pipe(zlib.createUnzip());
+                    this._stream = (this._stream.statusCode === 204) ? this._stream : this._stream.pipe(zlib.createUnzip());
                 }
                 
                 // Check for redirect
@@ -446,15 +447,11 @@ class XMLHttpRequest {
                     return
                 }
 
-                if (this._response && this._response.setEncoding) {
-                    this._response.setEncoding('utf8')
-                }
-
                 this.setState(HEADERS_RECEIVED)
                 this.status = this._response.statusCode
 
                 const responseBuffer = []
-                this._response.on('data', chunk => {
+                this._stream.on('data', chunk => {
                     // Make sure there's some data
                     if (chunk) {
                         responseBuffer.push(chunk)
@@ -466,7 +463,7 @@ class XMLHttpRequest {
                     }
                 })
 
-                this._response.on('end', () => {
+                this._stream.on('end', () => {
                     if (this._sendFlag) {
                         this.responseBuffer = responseBuffer
                         this.responseText = responseBuffer.toString('utf8')
@@ -480,7 +477,7 @@ class XMLHttpRequest {
                     }
                 })
 
-                this._response.on('error', error => {
+                this._stream.on('error', error => {
                     this.handleError(error)
                 })
             }
@@ -515,11 +512,12 @@ class XMLHttpRequest {
                 // If the file returned okay, parse its data and move to the DONE state
                 const response = JSON.parse(rawResponse)
 
-                console.log(JSON.stringify(response.responseBuffer))
-
                 this.status = response.statusCode
                 this.responseBuffer = response.responseBuffer
                 this.responseText = response.responseText
+
+                this._response = this._response || {}
+                this._response.headers = response.responseHeaders
             
                 this.setState(DONE)
             }
