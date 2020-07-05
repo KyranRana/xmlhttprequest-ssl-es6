@@ -400,15 +400,7 @@ class XMLHttpRequest {
                 // Set response var to the response we got back
                 // This is so it remains accessable outside this scope
                 this._response = resp
-                this._stream = resp
-
-                const contentEncoding = resp.headers['content-encoding']
-
-                if (contentEncoding === 'gzip'
-                    || contentEncoding === 'compress'
-                    || contentEncoding === 'deflate') {
-                    this._stream = (this._stream.statusCode === 204) ? this._stream : this._stream.pipe(zlib.createUnzip());
-                }
+                this._stream = resp             
                 
                 // Check for redirect
                 // @TODO Prevent looped redirects
@@ -465,8 +457,16 @@ class XMLHttpRequest {
 
                 this._stream.on('end', () => {
                     if (this._sendFlag) {
+                        const contentEncoding = resp.headers['content-encoding']
+                        if (contentEncoding === "gzip" 
+                            || contentEncoding === "deflate" 
+                            || contentEncoding === "compression") {
+                            this.responseText = zlib.gzipSync(responseBuffer).toString("utf8")
+                        } else {
+                            this.responseText = responseBuffer.toString("utf8")
+                        }
+
                         this.responseBuffer = responseBuffer
-                        this.responseText = responseBuffer.toString('utf8')
 
                         // The sendFlag needs to be set before setState is called.  Otherwise if we are chaining callbacks
                         // there can be a timing issue (the callback is called and a new call is made before the flag is reset).

@@ -7,15 +7,7 @@ function makeSyncRequest(ssl, options, data) {
         const doRequest = ssl ? https.request : http.request
         
         const request = doRequest(options, response => {
-            const contentEncoding = response.headers['content-encoding']
-
             const stream = response
-
-            if (contentEncoding === 'gzip'
-                || contentEncoding === 'compress'
-                || contentEncoding === 'deflate') {
-                stream = (stream.statusCode === 204) ? stream : stream.pipe(zlib.createUnzip());
-            }
             
             const responseBuffer = []
             stream.on('data', chunk => {
@@ -25,7 +17,16 @@ function makeSyncRequest(ssl, options, data) {
             })
 
             stream.on('end', () => {
-                const responseText = responseBuffer.toString('utf8')
+                let responseText
+
+                const contentEncoding = response.headers['content-encoding']
+                if (contentEncoding === "gzip" 
+                    || contentEncoding === "deflate" 
+                    || contentEncoding === "compression") {
+                    responseText = zlib.gzipSync(responseBuffer).toString("utf8")
+                } else {
+                    responseText = responseBuffer.toString("utf8")
+                }
 
                 resolve({ 
                     statusCode: response.statusCode,

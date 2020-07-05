@@ -1,7 +1,7 @@
 {
   "name": "@kyran12/xmlhttprequest-ssl-es6-node",
   "description": "XMLHttpRequest for ES6 Node",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "author": {
     "name": "Kyran Rana"
   },
