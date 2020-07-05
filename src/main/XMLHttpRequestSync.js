@@ -23,7 +23,7 @@ function makeSyncRequest(ssl, options, data) {
                 if (contentEncoding === "gzip" 
                     || contentEncoding === "deflate" 
                     || contentEncoding === "compression") {
-                    responseText = zlib.gzipSync(responseBuffer).toString("utf8")
+                    responseText = zlib.gunzipSync(responseBuffer).toString("utf8")
                 } else {
                     responseText = responseBuffer.toString("utf8")
                 }
