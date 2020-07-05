@@ -405,7 +405,7 @@ class XMLHttpRequest {
                 if (contentEncoding === 'gzip'
                     || contentEncoding === 'compress'
                     || contentEncoding === 'deflate') {
-                    this._response = (this._response.statusCode === 204) ? this._response : this._res.pipe(zlib.createUnzip());
+                    this._response = (this._response.statusCode === 204) ? this._response : this._response.pipe(zlib.createUnzip());
                 }
                 
                 // Check for redirect
