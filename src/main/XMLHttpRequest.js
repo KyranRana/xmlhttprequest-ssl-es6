@@ -461,7 +461,7 @@ class XMLHttpRequest {
                         if (contentEncoding === "gzip" 
                             || contentEncoding === "deflate" 
                             || contentEncoding === "compression") {
-                            this.responseText = zlib.gunzipSync(responseBuffer).toString("utf8")
+                            this.responseText = zlib.gunzipSync(Buffer.concat(responseBuffer)).toString("utf8")
                         } else {
                             this.responseText = responseBuffer.toString("utf8")
                         }
